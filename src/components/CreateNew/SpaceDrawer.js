@@ -64,6 +64,7 @@ export const SpaceDrawer = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
+          form.reset();
           setOpen((prev) => !prev);
           toast({
             title: 'Space: Created Sucessfully',
@@ -79,6 +80,7 @@ export const SpaceDrawer = () => {
         }
       })
       .catch((error) => {
+        form.reset();
         toast({
           variant: 'destructive',
           title: 'Failed to create space',
@@ -87,7 +89,7 @@ export const SpaceDrawer = () => {
       });
   }
   return (
-    <Drawer open={open} setOpenChange={setOpen}>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button
           className="w-16 h-16 rounded-2xl fixed bottom-8 right-8 p-2"
@@ -99,7 +101,7 @@ export const SpaceDrawer = () => {
           <Plus className="w-15 h-15" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="">
+      <DrawerContent className="" open={open}>
         <DrawerHeader>
           <DrawerTitle>Create New Space</DrawerTitle>
         </DrawerHeader>
@@ -160,7 +162,7 @@ export const SpaceDrawer = () => {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    setOpen((prev) => !prev);
+                    form.reset();
                   }}
                 >
                   Cancel

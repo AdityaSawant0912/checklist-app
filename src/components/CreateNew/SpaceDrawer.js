@@ -74,7 +74,7 @@ export const SpaceDrawer = () => {
           toast({
             variant: 'destructive',
             title: 'Failed to create space',
-            description: `Please try again later`,
+            description: `Please try again later ${JSON.stringify(data)}`,
           });
         }
       })

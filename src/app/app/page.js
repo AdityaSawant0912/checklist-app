@@ -1,9 +1,28 @@
-import React from 'react'
+'use client';
+import React, { useState, useEffect, useContext } from 'react';
+import { SpaceList } from '@/components/space/SpaceList';
+import { SpaceDrawer } from '@/components/CreateNew/SpaceDrawer';
+import { SpacesContext } from '@/context/SpaceProvider';
 
-function App() {
+function Spaces() {
+  const { spaces, addSpaces } = useContext(SpacesContext);
+  useEffect(() => {
+    async function fetchSpaces() {
+      const { spaces } = await fetch('/api/s').then((res) => res.json());
+      if (spaces) {
+        addSpaces(spaces)
+      }
+    }
+    fetchSpaces();
+    return () => {};
+  }, []);
+
   return (
-    <div>App</div>
-  )
+    <section className="m-2">
+      <SpaceList spaces={spaces} />
+      <SpaceDrawer />
+    </section>
+  );
 }
 
-export default App
+export default Spaces;

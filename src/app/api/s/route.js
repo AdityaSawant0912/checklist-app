@@ -41,6 +41,8 @@ export const POST = auth(async function POST(req) {
     
     return NextResponse.json({ success: true, space }, { status: 201 });
   } catch (error) {
+    console.log("Error", error);
+    
     return NextResponse.json({ success: false }, { status: 500 });
   }
 });

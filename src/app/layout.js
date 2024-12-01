@@ -1,6 +1,9 @@
+"use client"
 import './globals.css';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { SpaceProvider } from '@/context/SpaceProvider';
+import { WorkflowProvider } from '@/context/WorkflowProvider';
 
 export default function RootLayout({ children }) {
   return (
@@ -12,7 +15,9 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SpaceProvider>
+            <WorkflowProvider>{children}</WorkflowProvider>
+          </SpaceProvider>
           <Toaster />
         </ThemeProvider>
       </body>

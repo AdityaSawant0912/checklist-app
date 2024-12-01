@@ -1,16 +1,22 @@
 'use client';
 import React, { useState, useEffect, useContext } from 'react';
 import { SpaceList } from '@/components/space/SpaceList';
-import { SpaceDrawer } from '@/components/CreateNew/SpaceDrawer';
+import { SpaceCreateDrawer } from '@/components/space/SpaceCreateDrawer';
 import { SpacesContext } from '@/context/SpaceProvider';
 
 function Spaces() {
   const { spaces, addSpaces } = useContext(SpacesContext);
   useEffect(() => {
     async function fetchSpaces() {
-      const { spaces } = await fetch('/api/s').then((res) => res.json());
-      if (spaces) {
-        addSpaces(spaces)
+      const { spaces: fetchSpaces } = await fetch('/api/s').then((res) =>
+        res.json()
+      );
+      if (
+        fetchSpaces &&
+        JSON.stringify(fetchSpaces) !== JSON.stringify(spaces)
+      ) {
+        console.log('Replaced Spaces with fetched');
+        addSpaces(fetchSpaces, true);
       }
     }
     fetchSpaces();
@@ -20,7 +26,7 @@ function Spaces() {
   return (
     <section className="m-2">
       <SpaceList spaces={spaces} />
-      <SpaceDrawer />
+      <SpaceCreateDrawer />
     </section>
   );
 }

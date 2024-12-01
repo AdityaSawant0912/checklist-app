@@ -6,20 +6,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Button } from '../ui/button';
 import { EllipsisVertical } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { SpacesContext } from '@/context/SpaceProvider';
-import { SpaceEditDrawer } from './SpaceEditDrawer';
+import { WorkflowsContext } from '@/context/WorkflowProvider';
 import { DeleteDialog } from '@/common/DeleteDialog';
-export const SpaceOption = ({ space }) => {
+import { WorkflowEditDrawer } from './WorkflowEditDrawer';
+import { space } from 'postcss/lib/list';
+export const WorkflowOption = ({ spaceId, workflow }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
-  const { removeSpace } = useContext(SpacesContext);
+  const { removeWorkflow } = useContext(WorkflowsContext);
   const { toast } = useToast();
   function handleDeletion() {
-    fetch(`/api/s/${space._id}`, {
+    fetch(`/api/s/${spaceId}/w/${workflow._id}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())
@@ -27,13 +36,13 @@ export const SpaceOption = ({ space }) => {
         setIsDeleteDialogOpen((prev) => !prev);
         if (data.success) {
           toast({
-            title: 'Space: Deleted Sucessfully',
-            description: `Space Name: ${data.space.name}`,
+            title: 'Workflow: Deleted Sucessfully',
+            description: `Workflow Name: ${data.workflowTemplate.name}`,
           });
-          removeSpace(data.space);
+          removeWorkflow(data.workflowTemplate);
         } else {
           toast({
-            title: 'Failed to delete space',
+            title: 'Failed to delete workflow',
             description: `Please try again later.`,
           });
         }
@@ -41,7 +50,7 @@ export const SpaceOption = ({ space }) => {
       .catch((err) => {
         setIsDeleteDialogOpen((prev) => !prev);
         toast({
-          title: 'Failed to delete space',
+          title: 'Failed to delete workflow',
           description: `${err}`,
         });
       });
@@ -53,8 +62,9 @@ export const SpaceOption = ({ space }) => {
         onOpenChange={setIsDeleteDialogOpen}
         handleDeletion={handleDeletion}
       />
-      <SpaceEditDrawer
-        space={space}
+      <WorkflowEditDrawer
+        spaceId={spaceId}
+        workflow={workflow}
         open={isEditDrawerOpen}
         onOpenChange={setIsEditDrawerOpen}
       />

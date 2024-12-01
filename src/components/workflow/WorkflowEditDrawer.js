@@ -25,37 +25,38 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { SpacesContext } from '@/context/SpaceProvider';
-
+import { WorkflowsContext } from '@/context/WorkflowProvider';
 const formSchema = z.object({
-  name: z.string().min(1).max(50),
+  _id: z.string(),
+  spaceId: z.string(),
+  name: z.string().min(1).max(100),
   description: z.optional(z.string().max(100)),
-  visibilty: z.optional(z.string()),
+  favorite: z.boolean(),
 });
 
-export const SpaceDrawer = () => {
-  const [open, setOpen] = useState(false);
-  const { addSpaces } = useContext(SpacesContext);
+export const WorkflowEditDrawer = ({
+  spaceId,
+  workflow,
+  open,
+  onOpenChange,
+}) => {
+  const { updateWorkflow } = useContext(WorkflowsContext);
   const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      visibilty: 'Private',
+      _id: workflow._id,
+      spaceId: workflow.spaceId,
+      name: workflow.name,
+      description: workflow.description,
+      favorite: workflow.favorite,
     },
   });
   function onSubmit(values) {
     console.log(values);
-    fetch('/api/s', {
+    fetch(`/api/s/${spaceId}/w/${workflow._id}`, {
       method: 'POST',
       body: JSON.stringify({
         ...values,
@@ -65,17 +66,17 @@ export const SpaceDrawer = () => {
       .then((data) => {
         if (data.success) {
           form.reset();
-          setOpen((prev) => !prev);
+          onOpenChange((prev) => !prev);
           toast({
-            title: 'Space: Created Sucessfully',
-            description: `Space Name: ${data.space.name}`,
+            title: 'Workflow: Updated Sucessfully',
+            description: `Workflow Name: ${data.workflowTemplate.name}`,
           });
-          addSpaces([data.space]);
+          updateWorkflow(data.workflowTemplate);
         } else {
           toast({
             variant: 'destructive',
-            title: 'Failed to create space',
-            description: `Please try again later ${JSON.stringify(data)}`,
+            title: 'Failed to update workflow',
+            description: `Please try again later`,
           });
         }
       })
@@ -83,30 +84,19 @@ export const SpaceDrawer = () => {
         form.reset();
         toast({
           variant: 'destructive',
-          title: 'Failed to create space',
+          title: 'Failed to update workflow',
           description: `${error}`,
         });
       });
   }
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button
-          className="w-16 h-16 rounded-2xl fixed bottom-8 right-8 p-2"
-          size="icon"
-          onClick={() => {
-            setOpen((prev) => !prev);
-          }}
-        >
-          <Plus className="w-15 h-15" />
-        </Button>
-      </DrawerTrigger>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="" open={open}>
         <DrawerHeader>
-          <DrawerTitle>Create New Space</DrawerTitle>
+          <DrawerTitle>Edit Workflow</DrawerTitle>
         </DrawerHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -135,22 +125,15 @@ export const SpaceDrawer = () => {
             />
             <FormField
               control={form.control}
-              name="visibilty"
+              name="favorite"
               render={({ field }) => (
-                <FormItem className="mx-4 space-y-1">
-                  <FormLabel>Visibility</FormLabel>
+                <FormItem className="mx-4 workflow-y-1 space-x-4 items-center">
+                  <FormLabel>Favorite</FormLabel>
                   <FormControl>
-                    <Select>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Private" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Private" selected>
-                          Private
-                        </SelectItem>
-                        <SelectItem value="Public">Public</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

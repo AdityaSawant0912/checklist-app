@@ -1,10 +1,14 @@
 import mongoose, { Schema } from 'mongoose';
-const WorkflowSchema = new mongoose.Schema(
+const WorkflowTemplateSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'Please provide a name for this workflow.'],
       maxlength: [100, 'Name cannot be more than 100 characters.'],
+    },
+    description: {
+      type: String,
+      maxlength: [100, 'Description cannot be more than 100 characters.'],
     },
     spaceId: {
       type: Schema.Types.ObjectId,
@@ -27,5 +31,5 @@ const WorkflowSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-export default mongoose.model.Workflow ||
-  mongoose.model('Workflow', WorkflowSchema);
+export default mongoose.models.WorkflowTemplate ||
+  mongoose.model('WorkflowTemplate', WorkflowTemplateSchema);

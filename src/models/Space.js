@@ -16,11 +16,11 @@ const SpaceSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
-    visibilty: {
+    visibility: {
       type: String,
       default: 'Private',
     },
   },
   { timestamps: true }
 );
-export default mongoose.model.Space || mongoose.model('Space', SpaceSchema);
+export default mongoose.models.Space || mongoose.model('Space', SpaceSchema);

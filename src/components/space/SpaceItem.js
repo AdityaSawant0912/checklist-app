@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Card,
   CardContent,
@@ -13,15 +13,26 @@ import { SpaceOption } from './SpaceOption';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
+import { SpacesContext } from '@/context/SpaceProvider';
+import { Badge } from '../ui/badge';
 
 export const SpaceItem = ({ space }) => {
   const router = useRouter();
+  const { selectSpace } = useContext(SpacesContext);
   return (
     <Card className="mb-4">
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          {space.name} <SpaceOption space={space}/>
+        <CardTitle className="flex items-start justify-between  ">
+          <p className="text-2xl break-words">{space.name}</p>
+          <div className="flex-shrink-0">
+          <SpaceOption space={space} />
+          </div>
         </CardTitle>
+        <CardDescription>
+          <Badge className="px-1 py-[0.15rem]">{`${space.visibility
+            .charAt(0)
+            .toUpperCase()}${space.visibility.slice(1)}`}</Badge>
+        </CardDescription>
         {space.description ? (
           <CardDescription>{space.description}</CardDescription>
         ) : (
@@ -29,7 +40,12 @@ export const SpaceItem = ({ space }) => {
         )}
       </CardHeader>
       <CardContent>
-        <Button onClick={() => router.push(`app/s/${space._id}`)}>
+        <Button
+          onClick={() => {
+            selectSpace(space._id);
+            router.push(`app/s/${space._id}`);
+          }}
+        >
           Workflows
           <ArrowRight />
         </Button>

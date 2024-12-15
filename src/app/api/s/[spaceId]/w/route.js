@@ -11,6 +11,7 @@ export const GET = auth(async function GET(req, { params }) {
     );
   try {
     const { spaceId } = await params;
+    if(spaceId == undefined) throw new Error("URL parameter spaceId was not provided");
     await dbConnect();
     const workflowTemplates = await WorkflowTemplate.find({
       spaceId,
@@ -31,9 +32,11 @@ export const POST = auth(async function POST(req,  { params }) {
       { status: 401 }
     );
   try {
-    await dbConnect();
     const body = await req.json();
     const { spaceId } = await params;
+    if(!spaceId) throw new Error("URL parameter spaceId was not provided");
+    await dbConnect();
+    
     console.log(body);
     const workflowTemplate = await WorkflowTemplate.create({
       ...body,

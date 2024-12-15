@@ -1,11 +1,12 @@
-"use client"
+'use client';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { SpaceProvider } from '@/context/SpaceProvider';
 import { WorkflowProvider } from '@/context/WorkflowProvider';
+import { memo } from 'react';
 
-export default function RootLayout({ children }) {
+const RootLayout = memo(function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`antialiased h-screen`}>
@@ -23,4 +24,6 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-}
+});
+
+export default RootLayout;

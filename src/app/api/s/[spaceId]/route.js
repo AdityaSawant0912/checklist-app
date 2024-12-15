@@ -11,6 +11,8 @@ export const GET = auth(async function GET(req, { params }) {
     );
   try {
     const { spaceId } = await params;
+    console.log(spaceId);
+    if(spaceId === undefined) throw new Error("URL parameter spaceId was not provided");
     await dbConnect();
     const space = await Space.find({ _id: spaceId, userId: req.auth.id });
     return NextResponse.json({ success: true, space }, { status: 200 });

@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext, memo } from 'react';
 import { SpaceList } from '@/components/space/SpaceList';
 import { SpaceCreateDrawer } from '@/components/space/SpaceCreateDrawer';
 import { SpacesContext } from '@/context/SpaceProvider';
 
-function Spaces() {
+const Spaces = memo(function Spaces() {
   const { spaces, addSpaces } = useContext(SpacesContext);
   useEffect(() => {
     async function fetchSpaces() {
@@ -29,6 +29,6 @@ function Spaces() {
       <SpaceCreateDrawer />
     </section>
   );
-}
+});
 
 export default Spaces;

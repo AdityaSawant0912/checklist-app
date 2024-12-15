@@ -52,9 +52,7 @@ export const DELETE = auth(async function DELETE(req, { params }) {
       { status: 401 }
     );
   try {
-    const awaitedParams = await params;
     const { spaceId, workflowId } = await params;
-
     await dbConnect();
     const workflowTemplate = await WorkflowTemplate.findOneAndDelete({
       _id: workflowId,

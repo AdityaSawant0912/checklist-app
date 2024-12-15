@@ -13,20 +13,18 @@ import { WorkflowOption } from './WorkflowOption';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
-import { WorkflowsContext } from '@/context/WorkflowProvider';
 
 import { Star } from 'lucide-react';
 
 export const WorkflowItem = ({ workflow, spaceId }) => {
   const router = useRouter();
-  // const { selectSpace } = useContext(WorkflowsContext);
   return (
     <Card className="mb-4">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className='flex gap-1'>
+          <span className=''>
           {workflow.name}
-          {workflow.favorite ? <Star className='flex-shrink-0 w-4 h-4' color='#F7A31D' fill='#F6CF2B'/> : <>
+          {workflow.favorite ? <Star className='w-4 h-4 inline-block ml-1 mb-3' color='#F7A31D' fill='#F6CF2B'/> : <>
            </>}
           </span>
           <div className="flex-shrink-0">
@@ -39,7 +37,16 @@ export const WorkflowItem = ({ workflow, spaceId }) => {
           <></>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className={'flex justify-between'}>
+        <Button
+          onClick={() => {
+            // selectWorkflow(workflow._id);
+            router.push(`app/s/${spaceId}/w/${workflow._id}/modify`);
+          }}
+        >
+          Modify Steps
+          <ArrowRight />
+        </Button>
         <Button
           onClick={() => {
             // selectWorkflow(workflow._id);

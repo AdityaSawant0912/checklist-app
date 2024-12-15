@@ -9,9 +9,11 @@ function Layout(props) {
   const { selectedSpace, selectSpace } = useContext(SpacesContext);
 
   const { spaceId } = use(params);
-  console.log(selectedSpace);
   useEffect(() => {
     async function fetchSpace() {
+      console.log("ClientSide");
+      console.log(spaceId);
+      if(spaceId === undefined) return 
       const space = await fetch(`/api/s/${spaceId}`)
         .then((res) => res.json())
         .then((data) => data.space);
